@@ -4,6 +4,7 @@ public class CrownBonus {
 	private int requiredEarning;
 	private int requriedDuration;
 	private int bonusAmount;
+	private int expectedCrownLevel;
 
 	public int getRequiredEarning() {
 		return requiredEarning;
@@ -27,5 +28,13 @@ public class CrownBonus {
 
 	public void setBonusAmount(int bonusAmount) {
 		this.bonusAmount = bonusAmount;
+	}
+
+	public int getExpectedCrownLevel() {
+		return expectedCrownLevel;
+	}
+
+	public void setExpectedCrownLevel(int expectedCrownLevel) {
+		this.expectedCrownLevel = expectedCrownLevel;
 	}
 }
