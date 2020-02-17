@@ -1,4 +1,4 @@
-package model;
+package com.ramesh.calculator.model;
 
 public class Criteria {
 	private int duration;

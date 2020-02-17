@@ -1,4 +1,4 @@
-package model;
+package com.ramesh.calculator.model;
 
 public class BonusSheetVO {
 	private int minEarning;

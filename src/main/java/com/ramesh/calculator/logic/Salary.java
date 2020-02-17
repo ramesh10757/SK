@@ -12,10 +12,10 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
-import model.BonusSheetVO;
-import model.Criteria;
-import model.CrownBonus;
-import model.SalarySheetVO;
+import com.ramesh.calculator.model.BonusSheetVO;
+import com.ramesh.calculator.model.Criteria;
+import com.ramesh.calculator.model.CrownBonus;
+import com.ramesh.calculator.model.SalarySheetVO;
 
 public class Salary {
 	private int skId;
