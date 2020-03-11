@@ -11,12 +11,16 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.ramesh.calculator.model.BonusSheetVO;
 import com.ramesh.calculator.model.Criteria;
 import com.ramesh.calculator.model.CrownBonus;
 import com.ramesh.calculator.model.SalarySheetVO;
 
+@RestController
 public class Salary {
 	private int skId;
 	private int crownLevel;
@@ -31,9 +35,26 @@ public class Salary {
 	private Criteria criteria;
 	private CrownBonus crownBonus;
 	
-	public void initSalary(int skId, int crownLevel, boolean isFirstMonth
-			, int liveDuration, int validDays, int actualEarning
-			, int bonusGems) {
+	@RequestMapping("/")
+	String home() {
+		return "Welcome to Streamkar Shalini Agency";
+	}
+	
+	@RequestMapping("/calculate")
+	public String controllerMain(@RequestParam String skId, @RequestParam String crownLevel, @RequestParam boolean isFirstMonth, @RequestParam String liveDuration,
+			@RequestParam String validDays, @RequestParam String actualEarning, @RequestParam String bonusGems) throws EncryptedDocumentException, IOException {
+		Salary s = new Salary();
+		s.populateData();
+		s.initSalary(Integer.parseInt(skId), Integer.parseInt(crownLevel), isFirstMonth, Integer.parseInt(liveDuration),
+				Integer.parseInt(validDays), Integer.parseInt(actualEarning), Integer.parseInt(bonusGems));
+		// s.initSalary(123, 3, false, 70, 15, 10000000, 300000);
+		int finalSalary = s.calculateSalary();
+		System.out.println("My final salary: " + finalSalary * 65);
+		return "\u20B9 " +  String.valueOf(finalSalary*65);
+	}
+
+	public void initSalary(int skId, int crownLevel, boolean isFirstMonth, int liveDuration, int validDays,
+			int actualEarning, int bonusGems) {
 		this.skId = skId;
 		this.crownLevel = crownLevel;
 		this.isFirstMonth = isFirstMonth;
@@ -55,12 +76,14 @@ public class Salary {
 			if (liveDuration >= criteria.getBonusDuration() && validDays >= criteria.getValidDays()) {
 				salary += getBonus(actualEarning);
 			}
-			//calculate crown bonus if applicable
-			if(crownLevel >= crownBonus.getExpectedCrownLevel() && liveDuration >= crownBonus.getRequriedDuration() && actualEarning >= crownBonus.getRequiredEarning() && validDays >= criteria.getValidDays()) {
+			// calculate crown bonus if applicable
+			if (crownLevel >= crownBonus.getExpectedCrownLevel() && liveDuration >= crownBonus.getRequriedDuration()
+					&& actualEarning >= crownBonus.getRequiredEarning() && validDays >= criteria.getValidDays()) {
 				salary += crownBonus.getBonusAmount();
 			}
-			//new joinee bonus
-			if(isFirstMonth && actualEarning >= 1000000 && liveDuration >= criteria.getDuration() && validDays >= criteria.getValidDays()) {
+			// new joinee bonus
+			if (isFirstMonth && actualEarning >= 1000000 && liveDuration >= criteria.getDuration()
+					&& validDays >= criteria.getValidDays()) {
 				salary += 50;
 			}
 			return salary;
@@ -69,9 +92,9 @@ public class Salary {
 	}
 
 	private int getBonus(int actualEarning) {
-		for(BonusSheetVO bonusRow : bonusSheet) {
-			if(actualEarning >= bonusRow.getMinEarning() && actualEarning <= bonusRow.getMaxEarning()) {
-				System.out.println("Found Bonus: "+ bonusRow.getBonusAmount());
+		for (BonusSheetVO bonusRow : bonusSheet) {
+			if (actualEarning >= bonusRow.getMinEarning() && actualEarning <= bonusRow.getMaxEarning()) {
+				System.out.println("Found Bonus: " + bonusRow.getBonusAmount());
 				return bonusRow.getBonusAmount();
 			}
 		}
@@ -83,7 +106,8 @@ public class Salary {
 			if (actualEarning < salaryRow.getGemsRequirement()) {
 				continue;
 			} else {
-				System.out.println("Basic Salary calculated: "+ salaryRow.getBasicSalary());;
+				System.out.println("Basic Salary calculated: " + salaryRow.getBasicSalary());
+				;
 				return salaryRow.getBasicSalary();
 			}
 		}
@@ -201,12 +225,5 @@ public class Salary {
 		}
 	}
 
-	public static void main(String[] args) throws EncryptedDocumentException, IOException {
-		Salary s = new Salary();
-		s.populateData();
-		//           skid, crownlevel, isFirstMonth, liveDuration, validDays, actualEarning, bonusGems
-		s.initSalary(123, 3, false, 70, 15, 10000000, 300000);
-		int finalSalary = s.calculateSalary();
-		System.out.println("My final salary: " + finalSalary*65);
-	}
+	
 }
