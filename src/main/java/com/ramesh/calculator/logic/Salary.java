@@ -2,6 +2,7 @@ package com.ramesh.calculator.logic;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -115,8 +116,8 @@ public class Salary {
 	}
 
 	void populateData() throws EncryptedDocumentException, IOException {
-		String file = getClass().getClassLoader().getResource("Earning.xls").getFile();
-		Workbook wb = WorkbookFactory.create(new File(file));
+		InputStream file = getClass().getClassLoader().getResourceAsStream("Earning.xls");
+		Workbook wb = WorkbookFactory.create(file);
 		populateCriteria(wb);
 		populateCrownBonus(wb);
 		populateSalaryChart(wb);
