@@ -12,6 +12,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,7 +44,7 @@ public class Salary {
 	}
 	
 	@RequestMapping("/calculate")
-	public String controllerMain(@RequestParam String skId, @RequestParam String crownLevel, @RequestParam boolean isFirstMonth, @RequestParam String liveDuration,
+	public ResponseEntity<String> controllerMain(@RequestParam String skId, @RequestParam String crownLevel, @RequestParam boolean isFirstMonth, @RequestParam String liveDuration,
 			@RequestParam String validDays, @RequestParam String actualEarning, @RequestParam String bonusGems) throws EncryptedDocumentException, IOException {
 		Salary s = new Salary();
 		s.populateData();
@@ -51,7 +53,10 @@ public class Salary {
 		// s.initSalary(123, 3, false, 70, 15, 10000000, 300000);
 		int finalSalary = s.calculateSalary();
 		System.out.println("My final salary: " + finalSalary * 65);
-		return "\u20B9 " +  String.valueOf(finalSalary*65);
+		//"\u20B9 " + 
+		ResponseEntity<String> resp = new ResponseEntity<String>("\u20B9 " +String.valueOf(finalSalary*65), HttpStatus.OK);
+		return resp;
+		//return  String.valueOf(finalSalary*65);
 	}
 
 	public void initSalary(int skId, int crownLevel, boolean isFirstMonth, int liveDuration, int validDays,
