@@ -90,7 +90,7 @@ public class Salary {
 			// new joinee bonus
 			if (isFirstMonth && actualEarning >= 1000000 && liveDuration >= criteria.getDuration()
 					&& validDays >= criteria.getValidDays()) {
-				salary += 50;
+				salary += 60;
 			}
 			return salary;
 		}
